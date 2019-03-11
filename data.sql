@@ -10,7 +10,7 @@ CREATE TABLE users (
     last_name text NOT NULL,
     phone text,
     email text,
-    join_at timestamp without time zone default CURRENT_DATE NOT NULL,
+    join_at timestamp without time zone NOT NULL,
     last_login_at timestamp without time zone
 );
 
@@ -22,3 +22,5 @@ CREATE TABLE messages (
     sent_at timestamp without time zone NOT NULL,
     read_at timestamp without time zone
 );
+
+-- note: default CURRENT_DATE

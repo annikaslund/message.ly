@@ -11,19 +11,19 @@ const ExpressError = require("../expressError");
  *
  **/
 
-// router.post("/login", async function(req, res, next){
-//     try {
-//         let { username, password } = req.body;
-//         if (await User.authenticate(username, password)) {
-//             let token = jwt.sign({ username }, SECRET);
-//             return res.json({token});
-//         } else {
-//             throw new ExpressError("Invalid credentials", 400);
-//         }
-//     } catch (err) {
-//         return next(err);
-//     }
-// })
+router.post("/login", async function(req, res, next){
+    try {
+        let { username, password } = req.body;
+        if (await User.authenticate(username, password)) {
+            let token = jwt.sign({ username }, SECRET);
+            return res.json({token});
+        } else {
+            throw new ExpressError("Invalid credentials", 400);
+        }
+    } catch (err) {
+        return next(err);
+    }
+})
 
 
 /** POST /register - register user: registers, logs in, and returns token.
@@ -36,9 +36,8 @@ const ExpressError = require("../expressError");
  router.post("/register", async function(req, res, next){
     try {
         let { username, password, first_name, last_name, phone } = req.body;
-        debugger;
-        await User.register({username, password, first_name, last_name, phone});
-        let token = jwt.sign({ username }, SECRET);
+        let newUser = await User.register({username, password, first_name, last_name, phone});
+        let token = jwt.sign({ username: newUser.username }, SECRET);
         return res.json({token});
     } catch (err) {
         return next(err);

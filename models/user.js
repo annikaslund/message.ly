@@ -12,20 +12,18 @@ class User {
    */
 
   static async register({username, password, first_name, last_name, phone}) {
-    let hashedPW = bcrypt.hash(password, 10);
-    const newUser = await db.query(`INSERT INTO users (username, password, first_name, last_name, phone)
-              VALUES ($1, $2, $3, $4, $5)
+    let hashedPW = await bcrypt.hash(password, 10);
+    const newUser = await db.query(`INSERT INTO users (username, password, first_name, last_name, phone, join_at)
+              VALUES ($1, $2, $3, $4, $5, current_timestamp)
               RETURNING username, password, first_name, last_name, phone`,
               [username, hashedPW, first_name, last_name, phone]);  
               
-    return newUser;
+    return newUser.rows[0];
    }
 
   /** Authenticate: is this username/password valid? Returns boolean. */
 
   static async authenticate(username, password) {
-    // let hashedPW = bcrypt.hash(password, 10); // not perm
-    // console.log("@@@@@@@@@@hashed: ", hashedPW);  // not perm
     const result = await db.query(`SELECT password
                            FROM users
                            WHERE username = $1`,
