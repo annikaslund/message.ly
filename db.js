@@ -3,9 +3,18 @@
 
 const { Client } = require("pg");
 
-const client = new Client("postgres:///messagely");
+let DB_URI;
 
-client.connect();
+if (process.env.NODE_ENV === "test") {
+    DB_URI = "postgresql:///messagely-test";
+} else {
+    DB_URI = "postgresql:///messagely";
+}
+  
+let db = new Client({
+    connectionString: DB_URI
+});
 
+db.connect();
 
-module.exports = client;
+module.exports = db;
