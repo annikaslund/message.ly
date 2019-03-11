@@ -45,6 +45,17 @@ describe("POST /auth/register", function(){
             })
         expect(response.statusCode).toEqual(409);
     })
+    
+    test("Registers new user (no password)", async function(){
+        const response = await request(app)
+            .post("/auth/register").send({
+                username: "test",
+                first_name: "John",
+                last_name: "Doe",
+                phone: "6781928934"
+            })
+        expect(response.statusCode).toEqual(409);
+    })
 })
 
 afterEach(async () => {

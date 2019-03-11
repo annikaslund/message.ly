@@ -27,7 +27,7 @@ class User {
       return newUser.rows[0];
     } catch (err) {
       throw {
-        message: 'username has been taken',
+        message: 'username has been taken or you forgot to add a password',
         status: 409
       }
     }
