@@ -1,3 +1,8 @@
+\c messagely
+DROP TABLE IF EXISTS messages;
+DROP TABLE IF EXISTS users;
+
+
 CREATE TABLE users (
     username text PRIMARY KEY,
     password text,
@@ -5,7 +10,7 @@ CREATE TABLE users (
     last_name text NOT NULL,
     phone text,
     email text,
-    join_at timestamp without time zone NOT NULL,
+    join_at timestamp without time zone default CURRENT_DATE NOT NULL,
     last_login_at timestamp without time zone
 );
 
