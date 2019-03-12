@@ -62,4 +62,22 @@ const { ensureLoggedIn, ensureCorrectUser, ensureCorrectUserInMessage } = requir
  *
  **/
 
+router.post("/:id/read", ensureLoggedIn, async function(req, res, next){
+    try {
+        const msgID = req.params.id;
+        const msgInfo = await Message.get(msgID);
+        
+        if (msgInfo.to_user.username !== req.user.username){
+            throw new ExpressError("This message was not intended for you.", 401);
+        } 
+
+        const readMessage = await Message.markRead(msgID);
+
+        return res.json({ readMessage })
+
+    } catch (err) {
+        return next(err);
+    }
+})
+
 module.exports = router
