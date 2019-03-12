@@ -11,17 +11,21 @@ class Message {
    */
 
   static async create({from_username, to_username, body}) {
-    const result = await db.query(
-        `INSERT INTO messages (
-              from_username,
-              to_username,
-              body,
-              sent_at)
-            VALUES ($1, $2, $3, current_timestamp)
-            RETURNING id, from_username, to_username, body, sent_at`,
-        [from_username, to_username, body]);
+    try{
+      const result = await db.query(
+          `INSERT INTO messages (
+                from_username,
+                to_username,
+                body,
+                sent_at)
+              VALUES ($1, $2, $3, current_timestamp)
+              RETURNING id, from_username, to_username, body, sent_at`,
+          [from_username, to_username, body]);
 
-    return result.rows[0];
+      return result.rows[0];
+    } catch (err) {
+      throw {status: 400, message:"The user you are sending this to does not exist."}
+    }
   }
 
   /** Update read_at for message */
