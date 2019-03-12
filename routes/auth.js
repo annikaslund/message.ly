@@ -38,7 +38,7 @@ router.post("/login", async function(req, res, next){
     try {
         let { username, password, first_name, last_name, phone } = req.body;
         let newUser = await User.register({username, password, first_name, last_name, phone});
-        let token = jwt.sign({ username: newUser.username }, SECRET);
+        let token = jwt.sign({ username: newUser.username }, SECRET_KEY);
         return res.json({token});
     } catch (err) {
         return next(err);

@@ -28,7 +28,7 @@ router.get('/', ensureLoggedIn, async function(req, res, next) {
  *
  **/
 
-router.get('/:username', ensureLoggedIn, ensureCorrectUser, async function(req, res, next) {
+router.get('/:username', ensureLoggedIn, async function(req, res, next) {
     try {
         const username = req.params.username;
         const user = await User.get(username);
@@ -69,6 +69,16 @@ router.get('/:username/to', ensureLoggedIn, async function(req, res, next) {
  *                 to_user: {username, first_name, last_name, phone}}, ...]}
  *
  **/
+
+router.get('/:username/from', ensureLoggedIn, ensureCorrectUser, async function(req, res, next) {
+    try {
+        const username = req.params.username;
+        const messages = await User.messagesFrom(username);
+        return res.json({messages: messages.rows[0]});
+    } catch(err) {
+        return next(err)
+    }
+})
 
 
 module.exports = router;
