@@ -49,7 +49,7 @@ router.get('/:username', ensureLoggedIn, async function(req, res, next) {
  *
  **/
 
-router.get('/:username/to', ensureLoggedIn, async function(req, res, next) {
+router.get('/:username/to', ensureLoggedIn, ensureCorrectUser, async function(req, res, next) {
     try {
         const username = req.params.username;
         const messages = await User.messagesTo(username);
