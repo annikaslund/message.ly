@@ -37,6 +37,23 @@ const { ensureLoggedIn, ensureCorrectUser, ensureCorrectUserInMessage } = requir
  *
  **/
 
+ router.post("/", ensureLoggedIn, async function(req, res, next){
+    try {
+        const { from_username, to_username, body } = req.body;
+
+        if (from_username !== req.user.username){
+            throw new ExpressError("Cannot post messages for other users", 401);
+        } 
+
+        let newMsg = await Message.create({ from_username, to_username, body });
+
+        return res.json({ message: newMsg })
+
+    } catch (err) {
+        return next(err);
+    }
+ })
+
 /** POST/:id/read - mark message as read:
  *
  *  => {message: {id, read_at}}
