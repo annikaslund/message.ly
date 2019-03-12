@@ -1,8 +1,25 @@
+const express = require("express");
+const router = new express.Router();
+const User = require("../models/user");
+const jwt = require("jsonwebtoken");
+const {SECRET_KEY} = require("../config");;
+const ExpressError = require("../expressError");
+const { ensureLoggedIn, ensureCorrectUser } = require("../middleware/auth");
+
 /** GET / - get list of users.
  *
  * => {users: [{username, first_name, last_name, phone}, ...]}
  *
  **/
+
+router.get('/', ensureLoggedIn, async function(req, res, next) {
+    try {
+        const users = await User.all();
+        return res.json({users: users.rows});
+    } catch(err) {
+        return next(err)
+    }
+})
 
 
 /** GET /:username - get detail of users.
@@ -10,6 +27,16 @@
  * => {user: {username, first_name, last_name, phone, join_at, last_login_at}}
  *
  **/
+
+router.get('/:username', ensureLoggedIn, async function(req, res, next) {
+    try {
+        const username = req.params.username;
+        const user = await User.get(username);
+        return res.json({user: user.rows[0]});
+    } catch(err) {
+        return next(err)
+    }
+})
 
 
 /** GET /:username/to - get messages to user
@@ -32,3 +59,6 @@
  *                 to_user: {username, first_name, last_name, phone}}, ...]}
  *
  **/
+
+
+module.exports = router;
